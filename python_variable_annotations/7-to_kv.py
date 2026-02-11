@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-This module provides type-annotated function that 
+This module provides type-annotated function that
 takes different arguments and returns tuple.
 """
 from typing import Union, Tuple
