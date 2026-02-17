@@ -17,6 +17,9 @@ async def async_generator() -> Generator[float, None, None]:
 
 
 async def main():
+    """
+    This function iterates through the async_generator.
+    """
     async for value in async_generator():
         pass
 
