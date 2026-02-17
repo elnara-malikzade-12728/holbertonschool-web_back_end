@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-This module provides an async_generator function. 
+This module provides an async_generator function.
 """
 import asyncio
 import random
@@ -15,6 +15,7 @@ async def async_generator() -> Generator[float, None, None]:
         await asyncio.sleep(1)
         yield random.random()
 
+
 async def main():
     async for value in async_generator():
         pass
@@ -22,4 +23,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-    
