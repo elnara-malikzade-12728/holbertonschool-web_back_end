@@ -4,7 +4,7 @@ This module is for Babel object instantiation
 """
 
 from flask import Flask, request, render_template, g
-from flask_babel import Babel, _
+from flask_babel import Babel
 
 users = {
     1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
@@ -64,7 +64,7 @@ def before_request():
 @app.route("/")
 def home():
     """
-    Renders the template
+    Renders the index template
     """
     return render_template("5-index.html")
 
