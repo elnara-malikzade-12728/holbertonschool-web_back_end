@@ -1,14 +1,14 @@
-#!/usr/bin/env python3                                                                                                               
-"""                                                                                                                                  
-This module is for Babel object instantiation                                                                                        
+#!/usr/bin/env python3
+"""
+This module is for Babel object instantiation
 """
 from flask import Flask, request, render_template
 from flask_babel import Babel
 
 
 class Config:
-    """                                                                                                                              
-    This class is for configuring the languages                                                                                      
+    """
+    This class is for configuring the languages
     """
     LANGUAGES = ["en", "fr"]
     BABEL_DEFAULT_LOCALE = 'en'
@@ -16,14 +16,14 @@ class Config:
 
 
 def get_locale():
-    """                                                                                                                              
-    Determines the best match for supported languages                                                                                
     """
-    locale = request.accept_languages.best_match(app.config['LANGUAGES'])
-    if locale:
+    Determines the best match for supported languages
+    """
+    locale = request.args.get('locale')
+    if locale in app.config['LANGUAGES']:
         return locale
     else:
-        return app.config['BABEL_DEFAULT_LOCALE']
+        return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
 app = Flask(__name__)
@@ -33,8 +33,8 @@ babel = Babel(app, locale_selector=get_locale)
 
 @app.route('/')
 def home():
-    """                                                                                                                              
-    Renders the template                                                                                                             
+    """
+    Renders the template
     """
     return render_template('4-index.html')
 
