@@ -39,36 +39,24 @@ app.config.from_object(Config)
 babel = Babel(app, locale_selector=get_locale)
 
 
-def get_user(self, id):
-    """
-    A method to return a user dictionary or None if there is not any user
-    """
-    user_id = request.args.get('login_as')
-    if user_id:
-        return users.get(int(user_id))
-    else:
-        return None
+def get_user():
+    """ Returns a user dictionary or None if ID is invalid """
+    login_id = request.args.get('login_as')
+    if login_id:
+        return users.get(int(login_id))
+    return None
 
 
 @app.before_request
 def before_request():
-    """
-    A method to be used before every method,
-    that finds a user and sets it as a global user
-    """
-    user_id = request.args.get('login_as')
-    user = get_user(user_id)
-    g.user = user
+    """ Sets the found user as a global on flask.g.user """
+    g.user = get_user()
 
 
 @app.route('/')
 def home():
-    """
-    Renders the template
-    """
-    login_id = request.args.get('login_as')
-    user = users.get(int(login_id)) if login_id else None
-    return render_template('5-index.html', user=user)
+    """ Renders the template """
+    return render_template('5-index.html')
 
 
 if __name__ == '__main__':
