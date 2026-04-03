@@ -68,7 +68,7 @@ def home():
     """
     login_id = request.args.get('login_as')
     user = users.get(int(login_id)) if login_id else None
-    return render_template('4-index.html', user=user)
+    return render_template('5-index.html', user=user)
 
 
 if __name__ == '__main__':
