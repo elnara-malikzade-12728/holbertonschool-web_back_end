@@ -17,7 +17,7 @@ class Config:
 
 app = Flask(__name__)
 app.config.from_object(Config)
-babel = Babel(app, locale_selector=BABEL_DEFAULT_LOCALE)
+babel = Babel(app)
 
 
 @app.route('/')
