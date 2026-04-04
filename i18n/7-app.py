@@ -27,9 +27,6 @@ class Config:
 
 app = Flask(__name__)
 app.config.from_object(Config)
-babel = Babel(
-    app, locale_selector=get_locale(), timezone_selector=get_timezone()
-)
 
 
 def get_locale():
@@ -40,12 +37,16 @@ def get_locale():
     if locale in app.config["LANGUAGES"]:
         return locale
 
-    if g.user:
-        user_locale = g.user.get("locale")
+    user = getattr(g, "user", None)
+    if user:
+        user_locale = user.get("locale")
         if user_locale in app.config["LANGUAGES"]:
             return user_locale
 
-    return request.accept_languages.best_match(app.config["LANGUAGES"])
+    return (
+        request.accept_languages.best_match(app.config["LANGUAGES"])
+        or app.config["BABEL_DEFAULT_LOCALE"]
+    )
 
 
 def get_user():
@@ -64,15 +65,16 @@ def get_user():
 
 def get_timezone():
     """
-    A function that returns a url-provided or user time zone
+    Returns a valid URL-provided or user time zone, else UTC
     """
     timezone = request.args.get("timezone")
     if timezone:
         try:
             pytz.timezone(timezone)
             return timezone
-        except pytz.exceptions.UknownTimeZoneError:
+        except pytz.exceptions.UnknownTimeZoneError:
             pass
+
     user = getattr(g, "user", None)
     if user:
         user_timezone = user.get("timezone")
@@ -80,9 +82,15 @@ def get_timezone():
             try:
                 pytz.timezone(user_timezone)
                 return user_timezone
-            except pytz.exceptions.UknownTimeZoneError:
+            except pytz.exceptions.UnknownTimeZoneError:
                 pass
+
     return app.config["BABEL_DEFAULT_TIMEZONE"]
+
+
+babel = Babel(
+    app, locale_selector=get_locale, timezone_selector=get_timezone
+)
 
 
 @app.before_request
