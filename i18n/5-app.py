@@ -25,7 +25,6 @@ class Config:
 
 app = Flask(__name__)
 app.config.from_object(Config)
-babel = Babel(app, locale_selector=lambda: get_locale())
 
 
 def get_locale():
@@ -37,6 +36,9 @@ def get_locale():
         return locale
     else:
         return request.accept_languages.best_match(app.config["LANGUAGES"])
+
+
+babel = Babel(app, locale_selector=get_locale())
 
 
 def get_user():
