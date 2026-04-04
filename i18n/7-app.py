@@ -5,6 +5,8 @@ This module is for Babel object instantiation
 
 from flask import Flask, request, render_template, g
 from flask_babel import Babel
+import pytz
+
 
 users = {
     1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
@@ -25,7 +27,9 @@ class Config:
 
 app = Flask(__name__)
 app.config.from_object(Config)
-babel = Babel(app, locale_selector=get_locale())
+babel = Babel(
+    app, locale_selector=get_locale(), timezone_selector=get_timezone()
+)
 
 
 def get_locale():
@@ -58,6 +62,29 @@ def get_user():
         return None
 
 
+def get_timezone():
+    """
+    A function that returns a url-provided or user time zone
+    """
+    timezone = request.args.get("timezone")
+    if timezone:
+        try:
+            pytz.timezone(timezone)
+            return timezone
+        except pytz.exceptions.UknownTimeZoneError:
+            pass
+    user = getattr(g, "user", None)
+    if user:
+        user_timezone = user.get("timezone")
+        if user_timezone:
+            try:
+                pytz.timezone(user_timezone)
+                return user_timezone
+            except pytz.exceptions.UknownTimeZoneError:
+                pass
+    return app.config["BABEL_DEFAULT_TIMEZONE"]
+
+
 @app.before_request
 def before_request():
     """
@@ -71,7 +98,7 @@ def home():
     """
     Renders the index template
     """
-    return render_template("6-index.html")
+    return render_template("7-index.html")
 
 
 if __name__ == "__main__":
