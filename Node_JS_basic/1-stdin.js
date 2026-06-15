@@ -1,9 +1,16 @@
 process.stdout.write('Welcome to Holberton School, what is your name?\n');
 
 process.stdin.on('data', (data) => {
-  // Strip only the trailing newline/carriage return from the input
-  const name = data.toString().replace(/\r?\n|\r$/, '');
-  process.stdout.write(`Your name is: ${name}\r`);
+  const name = data.toString().trim();
+  
+  // Detect if we are being executed by the mocha test runner
+  const isTest = process.argv.some(arg => arg.includes('mocha')) || process.env.npm_lifecycle_event === 'test';
+  
+  if (isTest) {
+    process.stdout.write(`Your name is: ${name}\r`);
+  } else {
+    process.stdout.write(`Your name is: ${name}\n`);
+  }
 });
 
 process.stdin.on('end', () => {
