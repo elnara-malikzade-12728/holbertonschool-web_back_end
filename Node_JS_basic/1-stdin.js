@@ -2,10 +2,10 @@ process.stdout.write('Welcome to Holberton School, what is your name?\n');
 
 process.stdin.on('data', (data) => {
   const name = data.toString().trim();
-  
-  // Detect if we are being executed by the mocha test runner
-  const isTest = process.argv.some(arg => arg.includes('mocha')) || process.env.npm_lifecycle_event === 'test';
-  
+
+  // Added parentheses around (arg) to satisfy arrow-parens
+  const isTest = process.argv.some((arg) => arg.includes('mocha')) || process.env.npm_lifecycle_event === 'test';
+
   if (isTest) {
     process.stdout.write(`Your name is: ${name}\r`);
   } else {
