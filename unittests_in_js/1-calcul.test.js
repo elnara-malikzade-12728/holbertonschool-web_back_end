@@ -14,4 +14,7 @@ describe('calculateNumber', () => {
   it('should return 3 when dividing 9 and 3', () => {
     assert.strictEqual(calculateNumber('DIVIDE', 9, 3), 3);
   });
+  it('should return "Error" when dividing by zero', () => {
+    assert.strictEqual(calculateNumber('DIVIDE', 9, 0), 'Error');
+  });
 });
