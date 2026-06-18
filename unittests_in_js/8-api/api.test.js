@@ -9,3 +9,5 @@ describe('API', () => {
     expect(response.body).toEqual({ message: 'Welcome to the payment system' });
   });
 });
+
+module.exports = app;
