@@ -1,18 +1,15 @@
 const getPaymentTokenFromAPI = require('./6-payment_token');
 const { expect } = require('chai');
 
-describe('Async Testing with Callbacks', () => {
-  it('should wait for the callback to execute before passing', (done) => {
-    
-      setTimeout(() => {
-      const data = 'processed_token';
-      
-      try {
-        expect(data).to.equal('processed_token');
+describe('getPaymentTokenFromAPI', () => {
+  it('should return a correct response when success is true', (done) => {
+    getPaymentTokenFromAPI(true)
+      .then((response) => {
+        expect(response.data).to.equal('Successful response');
         done();
-      } catch (error) {
-        done(error); }
-      
-    }, 100);
+      })
+      .catch((error) => {
+        done(error);
+      });
   });
 });
