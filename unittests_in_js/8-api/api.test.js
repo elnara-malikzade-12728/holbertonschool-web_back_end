@@ -1,13 +1,14 @@
 const api = require('./api');
 const request = require('supertest');
-const express = require('express');
+const {expect} = require('chai')
 
-describe('API', () => {
+describe('API integration tests', () => {
   it('should return welcome message on GET /', async () => {
     const response = await request(api).get('/');
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({ message: 'Welcome to the payment system' });
+    expect(response.status).to.equal(200);
+    expect(response.text).to.equal('Welcome to the payment system');
   });
 });
 
 module.exports = app;
+
