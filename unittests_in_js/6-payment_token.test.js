@@ -1,4 +1,4 @@
-const getPaymentTokenFromAPI = require('../6-payment_token');
+const getPaymentTokenFromAPI = require('./6-payment_token');
 
 describe('Async Testing with Callbacks', () => {
   it('should wait for the callback to execute before passing', (done) => {
