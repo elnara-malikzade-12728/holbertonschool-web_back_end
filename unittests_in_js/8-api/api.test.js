@@ -1,5 +1,6 @@
 const api = require('./api');
 const request = require('supertest');
+const express = require('express');
 
 describe('API', () => {
   it('should return welcome message on GET /', async () => {
