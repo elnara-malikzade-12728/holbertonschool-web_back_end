@@ -1,9 +1,5 @@
-import fs from 'fs';
+const fs = require('fs');
 
-/**
- * Counts and logs students from a CSV database file.
- * @param {string} path - The path to the CSV database file.
- */
 function countStudents(path) {
   if (!fs.existsSync(path)) {
     throw new Error('Cannot load the database');
@@ -41,12 +37,11 @@ function countStudents(path) {
     for (const [field, names] of Object.entries(fields)) {
       console.log(`Number of students in ${field}: ${names.length}. List: ${names.join(', ')}`);
     }
+
   } catch (error) {
     throw new Error('Cannot load the database');
   }
 }
 
-// 🔑 THE BYPASS: Safely override CommonJS tracking locally for the linter.
-// This enforces total compatibility with the test file's require() call.
-/* eslint-disable-next-line no-undef */
+// 🔑 Native Node v12 Export style compatibility pattern
 module.exports = countStudents;
