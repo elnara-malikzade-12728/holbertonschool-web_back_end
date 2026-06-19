@@ -1,15 +1,20 @@
 const request = require('request');
 const { expect } = require('chai');
-const api = require('./api');
 
 describe('API integration tests', () => {
-  it('Correct status code?', async () => {
-    const response = await request(api).get('/');
-    expect(response.status).to.equal(200);
+  const URL = 'http://localhost:7865'; // 🔑 This declaration must be present
+
+  it('Correct status code?', (done) => {
+    request(URL, (error, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      done();
+    });
   });
 
-  it('Correct result?', async () => {
-    const response = await request(api).get('/');
-    expect(response.text).to.equal('Welcome to the payment system');
+  it('Correct result?', (done) => {
+    request(URL, (error, response, body) => {
+      expect(body).to.equal('Welcome to the payment system');
+      done();
+    });
   });
 });
