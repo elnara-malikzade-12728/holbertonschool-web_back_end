@@ -1,34 +1,47 @@
+import fs from 'fs';
+
 function countStudents(path) {
-  const fs = require('fs');
+  if (!fs.existsSync(path)) {
+    throw new Error('Cannot load the database');
+  }
 
-  return new Promise((resolve, reject) => {
-    fs.readFile(path, 'utf8', (err, data) => {
-      if (err) {
-        reject(new Error('Cannot load the database'));
-        return;
+  try {
+    const fileContent = fs.readFileSync(path, 'utf8').trim();
+    
+    // Split lines and drop empty rows
+    const lines = fileContent.split('\n').filter((line) => line.trim().length > 0);
+    
+    if (lines.length <= 1) {
+      console.log('Number of students: 0');
+      return;
+    }
+
+    // Isolate student data rows (skip header)
+    const studentRows = lines.slice(1);
+    console.log(`Number of students: ${studentRows.length}`);
+
+    // Map to count students per field
+    const fields = {};
+
+    for (const row of studentRows) {
+      const studentData = row.split(',');
+      const firstName = studentData[0].trim();
+      const field = studentData[studentData.length - 1].trim();
+
+      if (!fields[field]) {
+        fields[field] = [];
       }
+      fields[field].push(firstName);
+    }
 
-      const lines = data.trim().split('\n');
-      const students = lines.slice(1).map(line => line.split(','));
-      const studentCount = students.length;
+    // Print specific required text format for each major field
+    for (const [field, names] of Object.entries(fields)) {
+      console.log(`Number of students in ${field}: ${names.length}. List: ${names.join(', ')}`);
+    }
 
-      const fields = {};
-      students.forEach(student => {
-        const field = student[3];
-        if (!fields[field]) {
-          fields[field] = [];
-        }
-        fields[field].push(student[0]);
-      });
-
-      let result = `Number of students: ${studentCount}\n`;
-      for (const [field, names] of Object.entries(fields)) {
-        result += `Number of students in ${field}: ${names.length}. List: ${names.join(', ')}\n`;
-      }
-
-      resolve(result.trim());
-    });
-  });
+  } catch (error) {
+    throw new Error('Cannot load the database');
+  }
 }
 
-module.exports = countStudents;
+export default countStudents;
