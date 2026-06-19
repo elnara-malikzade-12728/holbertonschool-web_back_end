@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs'; // 🔑 ES6 Import
 
 function countStudents(path) {
   if (!fs.existsSync(path)) {
@@ -7,8 +7,6 @@ function countStudents(path) {
 
   try {
     const fileContent = fs.readFileSync(path, 'utf8').trim();
-    
-    // Split into rows and remove any trailing whitespace or empty lines
     const lines = fileContent.split('\n').filter((line) => line.trim().length > 0);
     
     if (lines.length <= 1) {
@@ -16,12 +14,10 @@ function countStudents(path) {
       return;
     }
 
-    // Process data rows, leaving out the header row
     const studentRows = lines.slice(1);
     console.log(`Number of students: ${studentRows.length}`);
 
     const fields = {};
-
     for (const row of studentRows) {
       const studentData = row.split(',');
       const firstName = studentData[0].trim();
@@ -33,7 +29,6 @@ function countStudents(path) {
       fields[field].push(firstName);
     }
 
-    // Print out student aggregates formatted exactly for the checker
     for (const [field, names] of Object.entries(fields)) {
       console.log(`Number of students in ${field}: ${names.length}. List: ${names.join(', ')}`);
     }
@@ -43,5 +38,4 @@ function countStudents(path) {
   }
 }
 
-// 🔑 Native Node v12 Export style compatibility pattern
-module.exports = countStudents;
+export default countStudents; // 🔑 ES6 Export Default required by Babel
