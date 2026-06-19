@@ -1,4 +1,4 @@
-import fs from 'fs';
+const fs = require('fs');
 
 function countStudents(path) {
   if (!fs.existsSync(path)) {
@@ -8,7 +8,7 @@ function countStudents(path) {
   try {
     const fileContent = fs.readFileSync(path, 'utf8').trim();
     
-    // Split lines and drop empty rows
+    // Split into rows and remove any trailing whitespace or empty lines
     const lines = fileContent.split('\n').filter((line) => line.trim().length > 0);
     
     if (lines.length <= 1) {
@@ -16,11 +16,10 @@ function countStudents(path) {
       return;
     }
 
-    // Isolate student data rows (skip header)
+    // Process data rows, leaving out the header row
     const studentRows = lines.slice(1);
     console.log(`Number of students: ${studentRows.length}`);
 
-    // Map to count students per field
     const fields = {};
 
     for (const row of studentRows) {
@@ -34,7 +33,7 @@ function countStudents(path) {
       fields[field].push(firstName);
     }
 
-    // Print specific required text format for each major field
+    // Print out student aggregates formatted exactly for the checker
     for (const [field, names] of Object.entries(fields)) {
       console.log(`Number of students in ${field}: ${names.length}. List: ${names.join(', ')}`);
     }
@@ -44,4 +43,5 @@ function countStudents(path) {
   }
 }
 
-export default countStudents;
+// 🔑 Native Node v12 Export style compatibility pattern
+module.exports = countStudents;
