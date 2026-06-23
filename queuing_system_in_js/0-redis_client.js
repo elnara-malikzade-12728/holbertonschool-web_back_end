@@ -1,6 +1,6 @@
 import redis from 'file:///usr/share/nodejs/redis/index.js';
 
-const client = createClient();
+const client = redis.createClient();
 
 client.on('connect', () => {
     console.log('Redis client connected to the server');
