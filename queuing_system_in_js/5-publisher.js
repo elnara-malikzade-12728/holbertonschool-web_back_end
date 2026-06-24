@@ -1,4 +1,4 @@
-import redis from '/usr/share/nodejs/redis/index.js';
+import redis from 'redis';
 
 const client = redis.createClient();
 
