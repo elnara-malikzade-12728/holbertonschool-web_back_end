@@ -7,16 +7,16 @@ function countStudents(path) {
 
   try {
     const fileContent = fs.readFileSync(path, 'utf8').trim();
-    
-    // Split into rows and remove any trailing whitespace or empty lines
-    const lines = fileContent.split('\n').filter((line) => line.trim().length > 0);
-    
+
+    const lines = fileContent
+      .split('\n')
+      .filter((line) => line.trim().length > 0);
+
     if (lines.length <= 1) {
       console.log('Number of students: 0');
       return;
     }
 
-    // Process data rows, leaving out the header row
     const studentRows = lines.slice(1);
     console.log(`Number of students: ${studentRows.length}`);
 
@@ -30,18 +30,16 @@ function countStudents(path) {
       if (!fields[field]) {
         fields[field] = [];
       }
+
       fields[field].push(firstName);
     }
 
-    // Print out student aggregates formatted exactly for the checker
     for (const [field, names] of Object.entries(fields)) {
       console.log(`Number of students in ${field}: ${names.length}. List: ${names.join(', ')}`);
     }
-
   } catch (error) {
     throw new Error('Cannot load the database');
   }
 }
 
-// 🔑 Native Node v12 Export style compatibility pattern
 module.exports = countStudents;
