@@ -8,14 +8,9 @@ function countStudents(path) {
         return;
       }
 
-      const lines = fileContent
-        .trim()
-        .split('\n')
-        .filter((line) => line.trim().length > 0);
-
+      const lines = fileContent.trim().split('\n').filter((line) => line.trim().length > 0);
       const studentRows = lines.slice(1);
-      console.log(`Number of students: ${studentRows.length}`);
-
+      const output = [`Number of students: ${studentRows.length}`];
       const fields = {};
 
       for (const row of studentRows) {
@@ -23,18 +18,16 @@ function countStudents(path) {
         const firstName = studentData[0].trim();
         const field = studentData[studentData.length - 1].trim();
 
-        if (!fields[field]) {
-          fields[field] = [];
-        }
-
+        if (!fields[field]) fields[field] = [];
         fields[field].push(firstName);
       }
 
       for (const [field, names] of Object.entries(fields)) {
-        console.log(`Number of students in ${field}: ${names.length}. List: ${names.join(', ')}`);
+        output.push(`Number of students in ${field}: ${names.length}. List: ${names.join(', ')}`);
       }
 
-      resolve();
+      output.forEach((line) => console.log(line));
+      resolve(output.join('\n'));
     });
   });
 }
